@@ -79,7 +79,7 @@ class MyCompletionContributor implements CompletionContributor {
     collector.addSuggestion(
       CompletionSuggestion(
         CompletionSuggestionKind.INVOCATION, // Type of suggestion.
-        1000, // Relevance score.
+        999999, // Relevance score.
         'void sayHello(String name) {\n print("Hello \$name"); \n}', // The code to insert.
         request.offset, // Offset for replacement.
         'void sayHello(String name) {\n print("Hello \$name"); \n}'
