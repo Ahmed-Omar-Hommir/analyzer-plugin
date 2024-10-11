@@ -80,14 +80,13 @@ class MyCompletionContributor implements CompletionContributor {
       CompletionSuggestion(
         CompletionSuggestionKind.INVOCATION, // Type of suggestion.
         1000, // Relevance score.
-        'void sayHello(String name) {\n  \n}', // The code to insert.
+        'void sayHello(String name) {\n print("Hello \$name"); \n}', // The code to insert.
         request.offset, // Offset for replacement.
-        'void sayHello(String name) {\n  \n}'
+        'void sayHello(String name) {\n print("Hello \$name"); \n}'
             .length, // Length of the completion.
         false, // Not deprecated.
         false, // Not potential.
-        displayText:
-            'void sayHello(String name)', // What is displayed in the suggestions list.
+        displayText: 'sayHello', // What is displayed in the suggestions list.
       ),
     );
 
