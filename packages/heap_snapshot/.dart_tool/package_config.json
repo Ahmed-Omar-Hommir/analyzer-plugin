@@ -1,0 +1,21 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "vm_service",
+      "rootUri": "../../vm_service",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "heap_snapshot",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    }
+  ],
+  "generated": "2024-10-11T19:01:40.577929Z",
+  "generator": "pub",
+  "generatorVersion": "3.5.3",
+  "pubCache": "file:///Users/ahmed/.pub-cache"
+}
