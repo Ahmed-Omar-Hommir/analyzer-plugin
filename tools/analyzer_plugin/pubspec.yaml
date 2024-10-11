@@ -1,0 +1,11 @@
+name: plugin_loader
+description: A sample command-line application.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  host_plugin:
+    git: https://github.com/Ahmed-Omar-Hommir/analyzer-plugin
