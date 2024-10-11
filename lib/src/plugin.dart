@@ -90,7 +90,7 @@ class MyCompletionContributor implements CompletionContributor {
       ),
     );
 
-    // collector.filterSuggestion((suggestion) => true);
+    collector.filterSuggestion((suggestion) => true);
 
     // If you need more suggestions, add them similarly.
   }

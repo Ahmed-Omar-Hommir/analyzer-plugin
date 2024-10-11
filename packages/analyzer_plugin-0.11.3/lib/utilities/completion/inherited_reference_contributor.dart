@@ -113,18 +113,18 @@ class InheritedReferenceContributor
         ? CompletionSuggestionKind.IDENTIFIER
         : CompletionSuggestionKind.INVOCATION;
 
-    // if (!skipChildClass) {
-    //   _addSuggestionsForType(classElement.thisType, optype,
-    //       isFunctionalArgument: isFunctionalArgument);
-    // }
+    if (!skipChildClass) {
+      _addSuggestionsForType(classElement.thisType, optype,
+          isFunctionalArgument: isFunctionalArgument);
+    }
 
-    // for (var type in classElement.allSupertypes) {
-    //   _addSuggestionsForType(type, optype,
-    //       isFunctionalArgument: isFunctionalArgument);
-    // }
-    // for (var suggestion in suggestions) {
-    //   collector.addSuggestion(suggestion);
-    // }
+    for (var type in classElement.allSupertypes) {
+      _addSuggestionsForType(type, optype,
+          isFunctionalArgument: isFunctionalArgument);
+    }
+    for (var suggestion in suggestions) {
+      collector.addSuggestion(suggestion);
+    }
   }
 
   /// Return the class containing the target or `null` if the target is in a
