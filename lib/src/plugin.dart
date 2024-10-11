@@ -76,19 +76,21 @@ class MyCompletionContributor implements CompletionContributor {
     request.checkAborted();
 
     // Add some simple keyword suggestions.
-    collector.addSuggestion(
-      CompletionSuggestion(
-        CompletionSuggestionKind.INVOCATION, // Type of suggestion.
-        999999, // Relevance score.
-        'void sayHello(String name) {\n print("Hello \$name"); \n}', // The code to insert.
-        request.offset, // Offset for replacement.
-        'void sayHello(String name) {\n print("Hello \$name"); \n}'
-            .length, // Length of the completion.
-        false, // Not deprecated.
-        false, // Not potential.
-        displayText: 'sayHello', // What is displayed in the suggestions list.
-      ),
-    );
+    // collector.addSuggestion(
+    //   CompletionSuggestion(
+    //     CompletionSuggestionKind.INVOCATION, // Type of suggestion.
+    //     999999, // Relevance score.
+    //     'void sayHello(String name) {\n print("Hello \$name"); \n}', // The code to insert.
+    //     request.offset, // Offset for replacement.
+    //     'void sayHello(String name) {\n print("Hello \$name"); \n}'
+    //         .length, // Length of the completion.
+    //     false, // Not deprecated.
+    //     false, // Not potential.
+    //     displayText: 'sayHello', // What is displayed in the suggestions list.
+    //   ),
+    // );
+
+    collector.filterSuggestion((suggestion) => true);
 
     // If you need more suggestions, add them similarly.
   }

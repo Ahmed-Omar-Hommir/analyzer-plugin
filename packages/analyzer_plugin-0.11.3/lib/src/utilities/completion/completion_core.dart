@@ -57,6 +57,11 @@ class CompletionCollectorImpl implements CompletionCollector {
   void addSuggestion(CompletionSuggestion suggestion) {
     suggestions.add(suggestion);
   }
+
+  @override
+  void filterSuggestion(bool Function(CompletionSuggestion suggestion) where) {
+    suggestions.removeWhere(where);
+  }
 }
 
 /// A concrete implementation of [DartCompletionRequest].

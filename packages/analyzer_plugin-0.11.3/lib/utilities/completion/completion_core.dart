@@ -45,6 +45,8 @@ abstract class CompletionCollector {
 
   /// Record the given completion [suggestion].
   void addSuggestion(CompletionSuggestion suggestion);
+
+  void filterSuggestion(bool Function(CompletionSuggestion suggestion) where);
 }
 
 /// An object used to produce completion suggestions.
