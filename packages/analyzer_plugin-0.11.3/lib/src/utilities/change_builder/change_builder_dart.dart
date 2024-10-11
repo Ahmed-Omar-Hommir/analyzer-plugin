@@ -856,10 +856,10 @@ class DartEditBuilderImpl extends EditBuilderImpl implements DartEditBuilder {
   void _addSuperTypeProposals(
       LinkedEditBuilder builder, DartType? type, Set<DartType> alreadyAdded) {
     if (type is InterfaceType && alreadyAdded.add(type)) {
-      builder.addSuggestion(
-        LinkedEditSuggestionKind.TYPE,
-        type.getDisplayString(withNullability: false),
-      );
+      // builder.addSuggestion(
+      //   LinkedEditSuggestionKind.TYPE,
+      //   type.getDisplayString(withNullability: false),
+      // );
       _addSuperTypeProposals(builder, type.superclass, alreadyAdded);
       for (var interfaceType in type.interfaces) {
         _addSuperTypeProposals(builder, interfaceType, alreadyAdded);

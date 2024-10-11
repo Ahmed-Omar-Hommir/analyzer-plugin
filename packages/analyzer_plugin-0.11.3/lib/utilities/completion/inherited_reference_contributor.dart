@@ -123,7 +123,7 @@ class InheritedReferenceContributor
           isFunctionalArgument: isFunctionalArgument);
     }
     for (var suggestion in suggestions) {
-      collector.addSuggestion(suggestion);
+      // collector.addSuggestion(suggestion);
     }
   }
 

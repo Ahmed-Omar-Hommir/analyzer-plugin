@@ -405,7 +405,7 @@ class EditBuilderImpl implements EditBuilder {
         var group = fileEditBuilder.changeBuilder.getLinkedEditGroup(groupName);
         group.addPosition(position, length);
         for (var suggestion in builder.suggestions) {
-          group.addSuggestion(suggestion);
+          // group.addSuggestion(suggestion);
         }
       }
     }
@@ -418,7 +418,7 @@ class EditBuilderImpl implements EditBuilder {
       builder.write(text);
       if (kind != null && suggestions != null) {
         for (var suggestion in suggestions) {
-          builder.addSuggestion(kind, suggestion);
+          // builder.addSuggestion(kind, suggestion);
         }
       } else if (kind != null || suggestions != null) {
         throw ArgumentError(

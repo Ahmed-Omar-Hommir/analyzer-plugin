@@ -332,7 +332,7 @@ class _SuggestionBuilder {
       }
     }
     for (var suggestion in suggestions) {
-      collector.addSuggestion(suggestion);
+      // collector.addSuggestion(suggestion);
     }
   }
 
