@@ -78,7 +78,7 @@ class MyCompletionContributor implements CompletionContributor {
     // Add some simple keyword suggestions.
     collector.addSuggestion(
       CompletionSuggestion(
-        CompletionSuggestionKind.KEYWORD, // Type of suggestion.
+        CompletionSuggestionKind.INVOCATION, // Type of suggestion.
         999999, // Relevance score.
         'void sayHello(String name) {\n print("Hello \$name"); \n}', // The code to insert.
         request.offset, // Offset for replacement.

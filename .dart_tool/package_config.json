@@ -21,7 +21,7 @@
     },
     {
       "name": "analyzer_plugin",
-      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/analyzer_plugin-0.11.3",
+      "rootUri": "../packages/analyzer_plugin-0.11.3",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -320,7 +320,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-10-11T06:38:38.432007Z",
+  "generated": "2024-10-11T18:19:35.672856Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "pubCache": "file:///Users/ahmed/.pub-cache"
