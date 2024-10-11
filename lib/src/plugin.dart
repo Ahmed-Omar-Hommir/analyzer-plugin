@@ -78,40 +78,16 @@ class MyCompletionContributor implements CompletionContributor {
     // Add some simple keyword suggestions.
     collector.addSuggestion(
       CompletionSuggestion(
-        CompletionSuggestionKind.KEYWORD,
+        CompletionSuggestionKind.INVOCATION, // Type of suggestion.
         1000, // Relevance score.
-        'ahmed', // The keyword to suggest.
-        0, // Offset for replacement.
-        'import'.length, // Length of the completion.
+        'void sayHello(String name) {\n  \n}', // The code to insert.
+        request.offset, // Offset for replacement.
+        'void sayHello(String name) {\n  \n}'
+            .length, // Length of the completion.
         false, // Not deprecated.
         false, // Not potential.
-        displayText: 'import',
-      ),
-    );
-
-    collector.addSuggestion(
-      CompletionSuggestion(
-        CompletionSuggestionKind.KEYWORD,
-        900, // Lower relevance for 'export'.
-        'export',
-        0,
-        'export'.length,
-        false,
-        false,
-        displayText: 'export',
-      ),
-    );
-
-    collector.addSuggestion(
-      CompletionSuggestion(
-        CompletionSuggestionKind.KEYWORD,
-        800, // Lower relevance for 'part'.
-        'part',
-        0,
-        'part'.length,
-        false,
-        false,
-        displayText: 'part',
+        displayText:
+            'void sayHello(String name)', // What is displayed in the suggestions list.
       ),
     );
 
