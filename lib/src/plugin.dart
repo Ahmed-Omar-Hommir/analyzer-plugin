@@ -1,16 +1,16 @@
 import 'package:analyzer/file_system/physical_file_system.dart';
-import 'package:analyzer_plugin/plugin/folding_mixin.dart';
 import 'package:analyzer_plugin/plugin/plugin.dart';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer_plugin/utilities/folding/folding.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'dart:convert';
 
-class MyPlugin extends ServerPlugin with DartFoldingMixin {
+class MyPlugin extends ServerPlugin {
   MyPlugin() : super(resourceProvider: PhysicalResourceProvider.INSTANCE);
 
-  // Track processed files with their last modification time for incremental analysis
-  final Map<String, DateTime> _processedFiles = <String, DateTime>{};
+  // Track processed files with their last modification time and content hash
+  final Map<String, _FileInfo> _processedFiles = <String, _FileInfo>{};
 
   // Cache for parsed ASTs to avoid re-parsing unchanged files
   final Map<String, CompilationUnit> _astCache = <String, CompilationUnit>{};
@@ -20,9 +20,6 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
 
   @override
   List<String> get fileGlobsToAnalyze => <String>['**/*_provider.dart'];
-
-  @override
-  bool get isCompatibleWithDart2 => true;
 
   @override
   String get name => 'host_plugin';
@@ -53,28 +50,31 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
         return;
       }
 
-      // Check if file needs processing (incremental analysis)
+      // Check if file exists
       final file = resourceProvider.getFile(path);
       if (!file.exists) {
+        // Remove from cache if file was deleted
+        _processedFiles.remove(path);
+        _astCache.remove(path);
         return;
       }
 
-      // For now, we'll process files on every analysis cycle
-      // In a more sophisticated implementation, you could track file hashes
-      final lastProcessed = _processedFiles[path];
-      final currentTime = DateTime.now();
+      // Get current file info
+      final currentContent = file.readAsStringSync();
+      final currentHash = _calculateHash(currentContent);
 
-      // Skip if file was processed very recently (within 1 second)
-      if (lastProcessed != null &&
-          currentTime.difference(lastProcessed).inSeconds < 1) {
+      // Check if file has actually changed
+      final previousInfo = _processedFiles[path];
+      if (previousInfo != null && previousInfo.contentHash == currentHash) {
+        // File content hasn't changed, skip processing
+        print('🔄 Skipping unchanged file: ${path.split('/').last}');
         return;
       }
 
-      // Read the source file content
-      final contents = file.readAsStringSync();
+      print('⚡ Processing changed file: ${path.split('/').last}');
 
-      // Parse the Dart file to find @command functions
-      final commandFunctions = _findCommandFunctions(contents, path);
+      // File has changed, process it
+      final commandFunctions = _findCommandFunctions(currentContent, path);
 
       // Create or overwrite a Dart file named "x.c.dart" in the same folder as [path].
       final folder = path.substring(0, path.lastIndexOf('/'));
@@ -91,8 +91,11 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
         _generatedContentCache[newFilePath] = generatedContent;
       }
 
-      // Update processed files cache
-      _processedFiles[path] = currentTime;
+      // Update processed files cache with new info
+      _processedFiles[path] = _FileInfo(
+        modificationTime: DateTime.now(),
+        contentHash: currentHash,
+      );
 
       // Clean up old cache entries to prevent memory leaks
       _cleanupCache();
@@ -214,11 +217,16 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
     return buffer.toString();
   }
 
+  String _calculateHash(String content) {
+    return base64.encode(utf8.encode(content)).substring(0, 16);
+  }
+
   void _cleanupCache() {
     // Keep only the last 100 processed files to prevent memory leaks
     if (_processedFiles.length > 100) {
       final sortedEntries = _processedFiles.entries.toList()
-        ..sort((a, b) => a.value.compareTo(b.value));
+        ..sort((a, b) =>
+            a.value.modificationTime.compareTo(b.value.modificationTime));
 
       final toRemove = sortedEntries.take(_processedFiles.length - 100);
       for (final entry in toRemove) {
@@ -261,4 +269,14 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
     _astCache.clear();
     _generatedContentCache.clear();
   }
+}
+
+class _FileInfo {
+  final DateTime modificationTime;
+  final String contentHash;
+
+  _FileInfo({
+    required this.modificationTime,
+    required this.contentHash,
+  });
 }
