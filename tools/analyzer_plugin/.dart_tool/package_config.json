@@ -3,19 +3,19 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-73.0.0",
+      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-76.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "_macros",
-      "rootUri": "file:///Users/ahmed/Downloads/flutter/bin/cache/dart-sdk/pkg/_macros",
+      "rootUri": "file:///Users/ahmed/fvm/versions/3.32.7/bin/cache/dart-sdk/pkg/_macros",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.5"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/analyzer-6.8.0",
+      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/analyzer-6.11.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -81,7 +81,7 @@
     },
     {
       "name": "macros",
-      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/macros-0.1.2-main.4",
+      "rootUri": "file:///Users/ahmed/.pub-cache/hosted/pub.dev/macros-0.1.3-main.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -152,8 +152,9 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-10-11T18:21:45.610097Z",
   "generator": "pub",
-  "generatorVersion": "3.5.3",
+  "generatorVersion": "3.8.1",
+  "flutterRoot": "file:///Users/ahmed/fvm/versions/3.32.7",
+  "flutterVersion": "3.32.7",
   "pubCache": "file:///Users/ahmed/.pub-cache"
 }

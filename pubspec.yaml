@@ -8,5 +8,5 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  analyzer: ^8.1.1
-  analyzer_plugin: ^0.13.7
+  analyzer: ">=7.5.9 <8.0.0"
+  analyzer_plugin:
