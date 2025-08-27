@@ -8,9 +8,15 @@ import 'package:analyzer/dart/ast/ast.dart';
 
 class MyPlugin extends ServerPlugin with DartFoldingMixin {
   MyPlugin() : super(resourceProvider: PhysicalResourceProvider.INSTANCE);
+  
+  // Track processed files to avoid reprocessing
+  final Set<String> _processedFiles = <String>{};
 
   @override
   List<String> get fileGlobsToAnalyze => <String>['**/*_provider.dart'];
+  
+  @override
+  bool get isCompatibleWithDart2 => true;
 
   @override
   String get name => 'host_plugin';
@@ -24,8 +30,32 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
     required String path,
   }) async {
     try {
+      // Skip if this is an x.c.dart file to avoid infinite loops
+      if (path.endsWith('x.c.dart')) {
+        return;
+      }
+      
+      // Skip if this is not a provider file
+      if (!path.contains('_provider.dart')) {
+        return;
+      }
+      
+      // Skip generated files
+      if (path.contains('.g.dart') || path.contains('.freezed.dart') || path.contains('.gen.dart')) {
+        return;
+      }
+      
+      // Skip if already processed
+      if (_processedFiles.contains(path)) {
+        return;
+      }
+      
       // Read the source file content
       final file = resourceProvider.getFile(path);
+      if (!file.exists) {
+        return;
+      }
+      
       final contents = file.readAsStringSync();
 
       // Parse the Dart file to find @command functions
@@ -39,8 +69,12 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
       // Generate the content for x.c.dart
       final generatedContent = _generateXCDartContent(commandFunctions);
       outputFile.writeAsStringSync(generatedContent);
+      
+      // Mark as processed
+      _processedFiles.add(path);
     } catch (e) {
-      print('Error analyzing file $path: $e');
+      // Don't print errors to avoid flooding the console
+      // print('Error analyzing file $path: $e');
     }
   }
 
@@ -48,6 +82,11 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
     final List<String> commandFunctions = [];
 
     try {
+      // Skip if content is empty or too large
+      if (contents.isEmpty || contents.length > 1000000) {
+        return commandFunctions;
+      }
+      
       final unit = parseString(content: contents).unit;
 
       for (final declaration in unit.declarations) {
@@ -100,7 +139,8 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
         }
       }
     } catch (e) {
-      print('Error parsing file $filePath: $e');
+      // Don't print errors to avoid flooding the console
+      // print('Error parsing file $filePath: $e');
     }
 
     return commandFunctions;
@@ -154,4 +194,9 @@ class MyPlugin extends ServerPlugin with DartFoldingMixin {
 
   @override
   List<FoldingContributor> getFoldingContributors(String path) => [];
+  
+  // Clear processed files cache (useful for testing)
+  void clearProcessedFiles() {
+    _processedFiles.clear();
+  }
 }
