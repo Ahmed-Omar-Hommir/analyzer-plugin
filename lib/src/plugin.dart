@@ -55,6 +55,9 @@ class MyPlugin extends ServerPlugin {
   @override
   Future<AnalysisUpdateContentResult> handleAnalysisUpdateContent(
       AnalysisUpdateContentParams parameters) async {
+    print('🔍 [PLUGIN] handleAnalysisUpdateContent called');
+    print('🔍 [PLUGIN] Files changed: ${parameters.files.keys}');
+
     // Process the overlay changes first, as the base class does
     final baseResult = await super.handleAnalysisUpdateContent(parameters);
 
@@ -62,19 +65,26 @@ class MyPlugin extends ServerPlugin {
     // we can access the content and trigger our generation.
     var changedPaths = <String>{};
     parameters.files.forEach((String path, Object? overlay) {
+      print('🔍 [PLUGIN] Checking path: $path');
       // Only process files matching your glob
       if (_matchesFileGlob(path)) {
+        print('🔍 [PLUGIN] Path matches glob: $path');
         changedPaths.add(path);
       }
     });
+
+    print('🔍 [PLUGIN] Changed paths to process: $changedPaths');
 
     // Trigger generation for each changed file
     var contextCollection = _contextCollection;
     if (contextCollection != null) {
       for (final path in changedPaths) {
+        print('🔍 [PLUGIN] Processing generation for: $path');
         final analysisContext = contextCollection.contextFor(path);
         await _performGeneration(analysisContext, path);
       }
+    } else {
+      print('🔍 [PLUGIN] No context collection available');
     }
 
     return baseResult;
@@ -110,44 +120,66 @@ class MyPlugin extends ServerPlugin {
   // Centralized generation logic
   Future<void> _performGeneration(
       AnalysisContext analysisContext, String path) async {
+    print('🔍 [PLUGIN] _performGeneration called for: $path');
+
     // Skip generated files and non-provider files as before
     if (path.endsWith('x.c.dart') ||
         !path.contains('_provider.dart') ||
         path.contains('.g.dart') ||
         path.contains('.freezed.dart') ||
         path.contains('.gen.dart')) {
+      print('🔍 [PLUGIN] Skipping file: $path');
       return;
     }
+
+    print('🔍 [PLUGIN] Processing file: $path');
 
     // Use getParsedUnit for efficient AST retrieval
     final parseResult = analysisContext.currentSession.getParsedUnit(path);
 
     if (parseResult is! ParsedUnitResult) {
+      print('🔍 [PLUGIN] Failed to parse file: $path');
       // If parsing fails, we cannot proceed with generation for this file.
       return;
     }
 
+    print('🔍 [PLUGIN] Successfully parsed file: $path');
+
     final commandFunctions = _findCommandFunctions(parseResult.unit);
+    print('🔍 [PLUGIN] Found command functions: $commandFunctions');
 
     final folder =
         path.substring(0, path.lastIndexOf(io.Platform.pathSeparator));
     final newFilePath = '$folder/x.c.dart';
     final outputFile = resourceProvider.getFile(newFilePath);
 
+    print('🔍 [PLUGIN] Output file path: $newFilePath');
+
     final generatedContent = _generateXCDartContent(commandFunctions);
     final existingCachedContent = _generatedContentCache[newFilePath];
 
+    print('🔍 [PLUGIN] Generated content length: ${generatedContent.length}');
+    print(
+        '🔍 [PLUGIN] Cached content length: ${existingCachedContent?.length ?? 0}');
+
     if (existingCachedContent != generatedContent) {
+      print('🔍 [PLUGIN] Content changed, writing to file');
       outputFile.writeAsStringSync(generatedContent);
       _generatedContentCache[newFilePath] = generatedContent;
+      print('🔍 [PLUGIN] File written successfully');
+    } else {
+      print('🔍 [PLUGIN] Content unchanged, skipping write');
     }
   }
 
   // Helper to check against file globs (simplified for example)
   bool _matchesFileGlob(String path) {
+    print('🔍 [PLUGIN] _matchesFileGlob checking: $path');
     // A more robust glob matching would be needed for complex patterns.
     // For now, let's assume it checks for '_provider.dart' as in your original.
-    return path.contains('_provider.dart');
+    final matches = path.contains('_provider.dart');
+    print('🔍 [PLUGIN] _matchesFileGlob result: $matches');
+    return matches;
   }
 
   List<String> _findCommandFunctions(CompilationUnit unit) {
