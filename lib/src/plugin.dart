@@ -26,9 +26,6 @@ class MyPlugin extends ServerPlugin {
   @override
   String get version => '1.0.0';
 
-  // Compatibility with Dart 2
-  bool get isCompatibleWithDart2 => true;
-
   @override
   Future<void> analyzeFile({
     required AnalysisContext analysisContext,
