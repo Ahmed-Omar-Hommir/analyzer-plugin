@@ -1,7 +1,6 @@
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer_plugin/plugin/plugin.dart';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
-import 'package:analyzer_plugin/utilities/folding/folding.dart';
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'dart:convert';
@@ -26,6 +25,9 @@ class MyPlugin extends ServerPlugin {
 
   @override
   String get version => '1.0.0';
+
+  // Compatibility with Dart 2
+  bool get isCompatibleWithDart2 => true;
 
   @override
   Future<void> analyzeFile({
@@ -67,11 +69,8 @@ class MyPlugin extends ServerPlugin {
       final previousInfo = _processedFiles[path];
       if (previousInfo != null && previousInfo.contentHash == currentHash) {
         // File content hasn't changed, skip processing
-        print('🔄 Skipping unchanged file: ${path.split('/').last}');
         return;
       }
-
-      print('⚡ Processing changed file: ${path.split('/').last}');
 
       // File has changed, process it
       final commandFunctions = _findCommandFunctions(currentContent, path);
@@ -100,8 +99,7 @@ class MyPlugin extends ServerPlugin {
       // Clean up old cache entries to prevent memory leaks
       _cleanupCache();
     } catch (e) {
-      // Don't print errors to avoid flooding the console
-      // print('Error analyzing file $path: $e');
+      // Silently handle errors to avoid crashing the analyzer server
     }
   }
 
@@ -260,8 +258,7 @@ class MyPlugin extends ServerPlugin {
     );
   }
 
-  @override
-  List<FoldingContributor> getFoldingContributors(String path) => [];
+  // No folding contributors needed
 
   // Clear processed files cache (useful for testing)
   void clearProcessedFiles() {

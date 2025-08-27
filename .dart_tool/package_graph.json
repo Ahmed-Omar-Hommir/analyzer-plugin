@@ -13,6 +13,18 @@
       "devDependencies": []
     },
     {
+      "name": "analyzer_plugin",
+      "version": "0.13.4",
+      "dependencies": [
+        "analyzer",
+        "collection",
+        "dart_style",
+        "path",
+        "pub_semver",
+        "yaml"
+      ]
+    },
+    {
       "name": "analyzer",
       "version": "7.7.1",
       "dependencies": [
@@ -31,6 +43,11 @@
       ]
     },
     {
+      "name": "path",
+      "version": "1.9.0",
+      "dependencies": []
+    },
+    {
       "name": "yaml",
       "version": "3.1.2",
       "dependencies": [
@@ -38,6 +55,33 @@
         "source_span",
         "string_scanner"
       ]
+    },
+    {
+      "name": "pub_semver",
+      "version": "2.1.4",
+      "dependencies": [
+        "collection",
+        "meta"
+      ]
+    },
+    {
+      "name": "dart_style",
+      "version": "3.1.1",
+      "dependencies": [
+        "analyzer",
+        "args",
+        "collection",
+        "package_config",
+        "path",
+        "pub_semver",
+        "source_span",
+        "yaml"
+      ]
+    },
+    {
+      "name": "collection",
+      "version": "1.19.0",
+      "dependencies": []
     },
     {
       "name": "watcher",
@@ -55,19 +99,6 @@
         "path",
         "term_glyph"
       ]
-    },
-    {
-      "name": "pub_semver",
-      "version": "2.1.4",
-      "dependencies": [
-        "collection",
-        "meta"
-      ]
-    },
-    {
-      "name": "path",
-      "version": "1.9.0",
-      "dependencies": []
     },
     {
       "name": "package_config",
@@ -107,11 +138,6 @@
       ]
     },
     {
-      "name": "collection",
-      "version": "1.19.0",
-      "dependencies": []
-    },
-    {
       "name": "_fe_analyzer_shared",
       "version": "85.0.0",
       "dependencies": [
@@ -124,6 +150,11 @@
       "dependencies": [
         "source_span"
       ]
+    },
+    {
+      "name": "args",
+      "version": "2.5.0",
+      "dependencies": []
     },
     {
       "name": "async",
@@ -152,37 +183,6 @@
       "dependencies": [
         "collection"
       ]
-    },
-    {
-      "name": "analyzer_plugin",
-      "version": "0.13.4",
-      "dependencies": [
-        "analyzer",
-        "collection",
-        "dart_style",
-        "path",
-        "pub_semver",
-        "yaml"
-      ]
-    },
-    {
-      "name": "dart_style",
-      "version": "3.1.1",
-      "dependencies": [
-        "analyzer",
-        "args",
-        "collection",
-        "package_config",
-        "path",
-        "pub_semver",
-        "source_span",
-        "yaml"
-      ]
-    },
-    {
-      "name": "args",
-      "version": "2.5.0",
-      "dependencies": []
     }
   ],
   "configVersion": 1
